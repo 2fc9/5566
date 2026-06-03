@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الأبراج الروحانية | علم الأرقام</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: '#ffd700',
+                        mystic: '#2a0a4a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0c29; }
+        ::-webkit-scrollbar-thumb { background: #302b63; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ffd700; }
+    </style>
+</head>
+<body class="min-h-screen font-sans selection:bg-gold selection:text-black antialiased relative">
+
+    <!-- Stars Background effect -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-10 left-10 w-2 h-2 bg-white rounded-full opacity-50 animate-pulse"></div>
+        <div class="absolute top-40 right-20 w-3 h-3 bg-white rounded-full opacity-30 animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-1 h-1 bg-white rounded-full opacity-70 animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-white rounded-full opacity-40 animate-pulse" style="animation-delay: 0.5s;"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-12 max-w-4xl">
+        
+        <!-- Header -->
+        <header class="text-center mb-12 animate-fade-in-down">
+            <i class="fas fa-moon text-4xl text-gold mb-4 animate-bounce"></i>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gradient">حاسبة الأبراج الروحانية</h1>
+            <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
+                اكتشف برجك الخفي بناءً على علم الأرقام وحساب الجُمّل لاسمك واسم والدتك
+            </p>
+        </header>
+
+        <!-- Main Calculator Card -->
+        <main class="glass-card rounded-3xl p-6 md:p-10 shadow-2xl mb-12">
+            <form id="calcForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="userName" class="block text-gray-300 text-sm font-bold mb-2">اسمك الأول</label>
+                        <input type="text" id="userName" required placeholder="مثال: اسمك/ج"
+                            class="w-full bg-black bg-opacity-30 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all duration-300">
+                    </div>
+                    <div>
+                        <label for="motherName" class="block text-gray-300 text-sm font-bold mb-2">اسم والدتك الأول</label>
+                        <input type="text" id="motherName" required placeholder="مثال: اسم الوالدة"
+                            class="w-full bg-black bg-opacity-30 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all duration-300">
+                    </div>
+                </div>
+                <div class="text-center pt-4">
+                    <button type="submit" 
+                        class="bg-gradient-to-r from-yellow-600 to-yellow-400 hover:from-yellow-500 hover:to-yellow-300 text-black font-bold py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105 duration-300 w-full md:w-auto">
+                        <i class="fas fa-magic mr-2 ml-2"></i> اكتشف برجي
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- Result Section (Hidden by default) -->
+        <section id="resultSection" class="hidden opacity-0 transition-opacity duration-1000 mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gradient">نتيجة حسابك الروحاني</h2>
+            
+            <!-- Calculation Breakdown -->
+            <div class="glass-card rounded-2xl p-6 mb-8 text-center bg-opacity-20 border-gold border-opacity-30">
+                <p class="text-xl mb-2 text-gray-200">مجموع اسمك (<span id="outUserName" class="text-gold font-bold"></span>) = <span id="valUserName" class="font-bold text-white"></span></p>
+                <p class="text-xl mb-2 text-gray-200">مجموع اسم الوالدة (<span id="outMotherName" class="text-gold font-bold"></span>) = <span id="valMotherName" class="font-bold text-white"></span></p>
+                <div class="w-1/2 mx-auto h-px bg-gray-600 my-4"></div>
+                <p class="text-2xl font-bold">المجموع الكلي = <span id="totalSum" class="text-gold"></span></p>
+                <p class="text-lg text-gray-400 mt-2">بعد القسمة على 12، الباقي هو: <span id="remainder" class="text-white font-bold px-2 py-1 bg-black bg-opacity-50 rounded"></span></p>
+            </div>
+
+            <!-- Zodiac Details Card -->
+            <div class="glass-card rounded-3xl p-8 relative overflow-hidden group border-gold">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition duration-500">
+                    <i id="zodiacIcon" class="fas fa-star text-9xl text-white"></i>
+                </div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row gap-8 items-center md:items-start">
+                    <div class="w-32 h-32 rounded-full border-4 border-gold flex items-center justify-center bg-mystic shadow-[0_0_30px_rgba(255,215,0,0.3)]">
+                        <span id="zodiacNumber" class="text-4xl font-bold text-gold"></span>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <h3 class="text-4xl font-bold mb-2 text-gold">برج <span id="zodiacName"></span></h3>
+                        
+                        <div class="flex flex-wrap gap-3 mb-6 mt-4">
+                            <span class="px-4 py-1 rounded-full bg-red-900 bg-opacity-50 border border-red-500 text-sm font-bold flex items-center gap-2">
+                                <i class="fas fa-fire"></i> طبيعة: <span id="zodiacElement"></span>
+                            </span>
+                            <span class="px-4 py-1 rounded-full bg-blue-900 bg-opacity-50 border border-blue-500 text-sm font-bold flex items-center gap-2">
+                                <i class="fas fa-gem"></i> الأحجار: <span id="zodiacStones"></span>
+                            </span>
+                        </div>
+
+                        <p id="zodiacDesc" class="text-gray-200 leading-relaxed text-lg mb-4"></p>
+                        
+                        <div class="bg-black bg-opacity-40 p-4 rounded-xl border-r-4 border-gold">
+                            <h4 class="font-bold text-gold mb-2"><i class="fas fa-star mr-1 ml-1"></i> أهم المميزات:</h4>
+                            <p id="zodiacTraits" class="text-gray-300 text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Zodiacs List -->
+        <section class="mt-16">
+            <h2 class="text-2xl font-bold mb-6 text-center border-b border-gray-600 pb-4">ترتيب الأبراج الروحانية الاثني عشر</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="allZodiacsContainer">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 text-gray-400 text-sm pb-8">
+            <p>   جميع الحقوق محفوظة © محمد ماجد الفريجي ®.</p>
+        </footer>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // جدول حساب الجمل
+        const abjad = {
+            'ا': 1, 'أ': 1, 'إ': 1, 'آ': 1,
+            'ب': 2, 'ج': 3, 'د': 4, 'ه': 5, 'ة': 5, 'هـ': 5,
+            'و': 6, 'ز': 7, 'ح': 8, 'ط': 9,
+            'ي': 10, 'ى': 10, 'ئ': 10, 'ك': 20, 'ل': 30, 'م': 40, 'ن': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90,
+            'ق': 100, 'ر': 200, 'ش': 300, 'ت': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000
+        };
+
+        // قاعدة بيانات الأبراج
+        const zodiacsData = [
+            { id: 1, name: "الحمل", element: "ناري", stones: "الياقوت، العقيق", icon: "fa-fire",
+              desc: "أنت شخصية تتمتع بالحماس والطاقة العالية، تحب المبادرة ولا تخشى التحديات.",
+              traits: "الشجاعة، القيادة الفطرية، الصراحة، التفاؤل. قد تتسرع في قراراتك أحياناً لكن قلبك طيب وتسامح بسرعة." },
+            { id: 2, name: "الثور", element: "ترابي", stones: "الزمرد، الياقوت الأزرق", icon: "fa-leaf",
+              desc: "تتميز بالصبر والمثابرة، تبحث دائماً عن الاستقرار المادي والعاطفي وتحب الجمال.",
+              traits: "الإخلاص، الاعتمادية، التذوق الفني العالي، الهدوء. تكره التغييرات المفاجئة وتفضل الخطوات المدروسة الثابتة." },
+            { id: 3, name: "الجوزاء", element: "هوائي", stones: "العقيق، اللؤلؤ", icon: "fa-wind",
+              desc: "شخصية اجتماعية بامتياز، ذكي وسريع البديهة ولديك قدرة عجيبة على التكيف مع مختلف الظروف.",
+              traits: "الفصاحة، حب التعلم، الفضول الإيجابي، سرعة الحركة. قد تمل بسرعة لذلك تحتاج دائماً لمصادر إلهام جديدة." },
+            { id: 4, name: "السرطان", element: "مائي", stones: "اللؤلؤ، حجر القمر", icon: "fa-water",
+              desc: "أنت بحر من العواطف والمشاعر، حدسك قوي جداً وتهتم بعائلتك وأحبائك لدرجة التضحية.",
+              traits: "الحنان، الخيال الواسع، الذاكرة القوية، حماية من تحب. قد تكون حساساً جداً وتميل للابتعاد عندما تنجرح." },
+            { id: 5, name: "الأسد", element: "ناري", stones: "الزبرجد، الياقوت", icon: "fa-sun",
+              desc: "شخصية ملكية، تحب أن تكون في دائرة الضوء، تتمتع بكرم بالغ وثقة عالية بالنفس.",
+              traits: "الكرم، الإبداع، العاطفة الجياشة، الولاء. تمتلك جاذبية خاصة وتستطيع بث الإيجابية في من حولك." },
+            { id: 6, name: "العذراء", element: "ترابي", stones: "الياقوت الأزرق، العقيق اليماني", icon: "fa-leaf",
+              desc: "أنت رمز للدقة والنظام، تحلل الأمور بذكاء وتسعى دائماً للكمال في عملك وحياتك.",
+              traits: "الذكاء التحليلي، الاجتهاد، التواضع، تقديم المساعدة. تهتم بالتفاصيل الدقيقة التي قد لا يلاحظها غيرك." },
+            { id: 7, name: "الميزان", element: "هوائي", stones: "الأوبال، اللازورد", icon: "fa-balance-scale",
+              desc: "تبحث دائماً عن العدل والسلام والتوازن. شخصية دبلوماسية ساحرة لا تحب الصراعات.",
+              traits: "الرومانسية، السحر الاجتماعي، العدالة، الذوق الرفيع. بارع في حل الخلافات بين الناس وتقريب وجهات النظر." },
+            { id: 8, name: "العقرب", element: "مائي", stones: "التوباز، الزبرجد", icon: "fa-droplet",
+              desc: "تملك شخصية غامضة وعميقة، إرادتك حديدية ولا تتنازل عن أهدافك بسهولة، وحدسك لا يخطئ.",
+              traits: "التركيز العالي، العزيمة، الشغف، قوة الملاحظة. صديق مخلص جداً ولكنك لا تنسى من يسيء إليك." },
+            { id: 9, name: "القوس", element: "ناري", stones: "الفيروز، الجمشت", icon: "fa-bow-arrow",
+              desc: "روح حرة تعشق السفر والمغامرة والحرية، صريح جداً ومحب للحياة وفلسفتها.",
+              traits: "المرح، الانطلاق، الصدق المطلق، التفاؤل الدائم. لا تحب القيود وتسعى دائماً لاكتشاف آفاق جديدة." },
+            { id: 10, name: "الجدي", element: "ترابي", stones: "العقيق الأحمر، الأونيكس", icon: "fa-mountain",
+              desc: "الطموح والمسؤولية هما عنوانك. أنت شخصية عملية قادرة على تحمل الصعاب لبلوغ القمة.",
+              traits: "الانضباط، الحكمة، الإدارة الناجحة، الجدية. تبني حياتك خطوة بخطوة وتفضل النجاح المستدام على السريع." },
+            { id: 11, name: "الدلو", element: "هوائي", stones: "الجمشت، العقيق", icon: "fa-wind",
+              desc: "أنت مفكر حر، متمرد على المألوف، تسعى دائماً لمساعدة الإنسانية وتملك أفكاراً تسبق زمانك.",
+              traits: "الاستقلالية، الابتكار، الصداقة الحقيقية، الإنسانية. تكره الروتين وتتمتع بشخصية فريدة يصعب تكرارها." },
+            { id: 12, name: "الحوت", element: "مائي", stones: "حجر الدم، الجمشت", icon: "fa-water",
+              desc: "أنت شخصية روحانية بامتياز، حالم وعاطفي وتتأثر جداً بمحيطك، مبدع وتمتلك مواهب فنية.",
+              traits: "الرحمة، التعاطف العميق، الخيال المبدع، التسامح. عالمك الداخلي غني جداً وتجد راحتك في الفن والتأمل." }
+        ];
+
+        // دالة حساب قيمة الكلمة بحسب الجمل
+        function calculateWordValue(word) {
+            let sum = 0;
+            // إزالة المسافات وتحويل الحروف المميزة لأصلها لضمان دقة الحساب
+            let cleanWord = word.replace(/\s+/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+            
+            for (let i = 0; i < cleanWord.length; i++) {
+                let char = cleanWord[i];
+                if (abjad[char]) {
+                    sum += abjad[char];
+                }
+            }
+            return sum;
+        }
+
+        // عرض قائمة الأبراج السفلية
+        const container = document.getElementById('allZodiacsContainer');
+        zodiacsData.forEach(z => {
+            const card = document.createElement('div');
+            card.className = 'glass-card p-4 rounded-xl text-center hover:bg-white hover:bg-opacity-10 transition cursor-default border border-gray-700';
+            card.innerHTML = `
+                <div class="text-gold font-bold text-xl mb-1">${z.id}</div>
+                <div class="text-white font-bold">${z.name}</div>
+                <div class="text-xs text-gray-400 mt-1">${z.element}</div>
+            `;
+            container.appendChild(card);
+        });
+
+        // معالجة النموذج
+        document.getElementById('calcForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value.trim();
+            const motherName = document.getElementById('motherName').value.trim();
+
+            if(!name || !motherName) return;
+
+            // الحساب
+            const nameVal = calculateWordValue(name);
+            const motherVal = calculateWordValue(motherName);
+            const total = nameVal + motherVal;
+            
+            let remainder = total % 12;
+            if (remainder === 0) remainder = 12; // إذا كان الباقي 0 فالبرج هو الثاني عشر (الحوت)
+
+            // جلب بيانات البرج
+            const myZodiac = zodiacsData.find(z => z.id === remainder);
+
+            // تحديث واجهة المستخدم
+            document.getElementById('outUserName').innerText = name;
+            document.getElementById('valUserName').innerText = nameVal;
+            document.getElementById('outMotherName').innerText = motherName;
+            document.getElementById('valMotherName').innerText = motherVal;
+            document.getElementById('totalSum').innerText = total;
+            document.getElementById('remainder').innerText = remainder;
+
+            document.getElementById('zodiacNumber').innerText = remainder;
+            document.getElementById('zodiacName').innerText = myZodiac.name;
+            document.getElementById('zodiacElement').innerText = myZodiac.element;
+            document.getElementById('zodiacStones').innerText = myZodiac.stones;
+            document.getElementById('zodiacDesc').innerText = myZodiac.desc;
+            document.getElementById('zodiacTraits').innerText = myZodiac.traits;
+            
+            // تحديث الأيقونة
+            const iconElem = document.getElementById('zodiacIcon');
+            iconElem.className = `fas ${myZodiac.icon} text-9xl text-white`;
+
+            // إظهار النتيجة بتأثير جميل
+            const resultSection = document.getElementById('resultSection');
+            resultSection.classList.remove('hidden');
+            
+            // تأخير بسيط لتفعيل تأثير الانتقال (Fade in)
+            setTimeout(() => {
+                resultSection.classList.remove('opacity-0');
+                resultSection.classList.add('opacity-100');
+                // النزول التلقائي لقسم النتيجة
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
+
